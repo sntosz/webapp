@@ -15,7 +15,9 @@ class ImagensModel extends BaseModel
      * Summary of salvar
      * @param array $imagem
      *      [ 'nome', 'nome_original', 'caminho' ]
+     * 
      * @return array|null
+     *      [ 'id', 'nome', 'nome_original', 'data_envio', 'caminho' ]
      */
     public function salvar($imagem)
     {

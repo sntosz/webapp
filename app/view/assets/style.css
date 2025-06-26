@@ -41,8 +41,22 @@ section {
         -moz-box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.64);
     }
 
-    a {
+    a,
+    span {
         text-align: center;
+    }
+}
+
+.profile-image {
+    height: 100px;
+    width: 100px;
+    margin-bottom: .5rem;
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
     }
 }
 
@@ -50,6 +64,22 @@ section {
     display: flex;
 }
 
+.column {
+    flex-direction: column;
+}
+
 .end {
     justify-content: flex-end;
+}
+
+.center {
+    justify-content: center;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.g-2 {
+    gap: 4px;
 }

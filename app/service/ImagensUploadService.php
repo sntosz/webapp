@@ -3,6 +3,14 @@ require_once __DIR__ . '/../model/ImagensModel.php';
 
 class ImagensUploadService
 {
+
+    /**
+     * Summary of upload
+     * @param mixed $imagem
+     * 
+     * @return array|null
+     *      [ 'id', 'nome', 'nome_original', 'data_envio', 'caminho' ]
+     */
     public static function upload($imagem)
     {
         // tratamento para tipo de arquivos apenas imagens

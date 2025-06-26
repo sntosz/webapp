@@ -1,10 +1,34 @@
 <?php
-require_once __DIR__ . '/app/model/ImagensModel.php';
 
-$imagensModel = new ImagensModel();
-$imagens = $imagensModel->buscarTodas();
+// inicia a sessão
+session_start();
+
+
+$tempoLimite = 5;
+
+
+if (!isset($_SESSION['LAST_ACTIVITY'])) {
+    $_SESSION['LAST_ACTIVITY'] = time();
+} else {
+    $tempoAtual = time();
+    $tempo_ocioso = $tempoAtual - $_SESSION['LAST_ACTIVITY'];
+    
+    if ($tempo_ocioso > $tempoLimite) {
+        session_unset();
+        session_destroy();
+    } else {
+        $_SESSION['LAST_ACTIVITY'] = $tempoAtual;
+    }
+}
+
+
+
+require_once __DIR__ . '/app/model/GaleriaModel.php';
+
+$galeriaModel = new GaleriaModel();
+$imagens = $galeriaModel->buscarTodas();
+
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -20,28 +44,56 @@ $imagens = $imagensModel->buscarTodas();
 </head>
 
 <body>
+    <?php if (isset($_SESSION['id'])): ?>
+        <section>
+            <p>
+                Olá <?= $_SESSION['nome'] ?>
+            </p>
+        </section>
+    <?php endif; ?>
     <section>
-        <div class="flex end">
+        <div class="flex end g-2">
+            <a href="login.php">
+                Entrar
+            </a>
+            <a href="logout.php">
+                Sair
+            </a>
             <a href="usuarioCadastrar.php">
                 Cadastrar usuário
             </a>
         </div>
-        <form action="upload.php"
-            method="POST"
-            enctype="multipart/form-data">
-            <input type="file" name="foto" accept="image/*">
-            <button type="submit">Enviar</button>
-        </form>
+        <?php if (isset($_SESSION['id'])): ?>
+            <form action="upload.php"
+                method="POST"
+                enctype="multipart/form-data">
+                <div>
+                    <label for="usuario_id">Usuário</label>
+                    <input type="text" name="usuario_id" required>
+                </div>
+                <div>
+                    <label for="foto">Imagem</label>
+                    <input type="file" name="foto" accept="image/*">
+                </div>
+                <button type="submit">Enviar</button>
+            </form>
+        <?php endif; ?>
     </section>
 
     <section>
         <div class="container">
             <?php foreach ($imagens as $imagem): ?>
                 <div class="image-box">
-                    <img src="<?= $imagem['caminho'] ?>" alt="<?= $imagem['nome_original'] ?>">
-                    <a href="<?= $imagem['caminho'] ?>" download>
-                        <?= $imagem['nome_original'] ?>
+                    <img src="<?= $imagem['imagem_caminho'] ?>" alt="<?= $imagem['imagem_nome_original'] ?>">
+                    <a href="<?= $imagem['imagem_caminho'] ?>" download>
+                        <?= $imagem['imagem_nome_original'] ?>
                     </a>
+                    <span>
+                        Enviado por:
+                        <a href="usuarioGaleria.php?id=<?= $imagem['usuario_id'] ?>">
+                            <?= $imagem['usuario_nome'] ?>
+                        </a>
+                    </span>
                 </div>
             <?php endforeach  ?>
         </div>
